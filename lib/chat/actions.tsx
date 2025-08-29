@@ -231,11 +231,11 @@ async function submitUserMessage(
 
   try {
     result = await streamUI({
-      model,
+      model: model as any,
       initial: <SpinnerMessage />,
       messages,
       maxTokens: 3000,
-      text: ({ content, done, delta }) => {
+      text: ({ content, done, delta }: any) => {
         if (!textStream) {
           textStream = createStreamableValue('')
           textNode = <BotMessage content={textStream.value} />
@@ -264,7 +264,7 @@ async function submitUserMessage(
         listStocks: {
           description: 'List three imaginary stocks that are trending.',
           parameters: listStocksParameters,
-          generate: async function* ({ stocks }) {
+          generate: async function* ({ stocks }: any) {
             yield (
               <BotCard>
                 <StocksSkeleton />
@@ -320,7 +320,7 @@ async function submitUserMessage(
           description:
             'Get the current stock price of a given stock or currency. Use this to show the price to the user.',
           parameters: showStockPriceParameters,
-          generate: async function* ({ symbol, price, delta }) {
+          generate: async function* ({ symbol, price, delta }: any) {
             yield (
               <BotCard>
                 <StockSkeleton />
@@ -376,7 +376,7 @@ async function submitUserMessage(
           description:
             'Show price and the UI to purchase a stock or currency. Use this if the user wants to purchase a stock or currency.',
           parameters: showStockPurchaseParameters,
-          generate: async function* ({ symbol, price, numberOfShares = 100 }) {
+          generate: async function* ({ symbol, price, numberOfShares = 100 }: any) {
             const toolCallId = getToolCallId(modelSlug)
 
             if (numberOfShares <= 0 || numberOfShares > 1000) {
@@ -484,7 +484,7 @@ async function submitUserMessage(
           description:
             'List funny imaginary events between user highlighted dates that describe stock activity.',
           parameters: getEventsParameters,
-          generate: async function* ({ events }) {
+          generate: async function* ({ events }: any) {
             yield (
               <BotCard>
                 <EventsSkeleton />
@@ -585,7 +585,7 @@ export const AI = createAI<AIState, UIState>({
       return
     }
   },
-  onSetAIState: async ({ state }) => {
+  onSetAIState: async ({ state }: any) => {
     'use server'
 
     const session = await auth()
